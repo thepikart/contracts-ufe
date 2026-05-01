@@ -35,7 +35,7 @@ export class ContractList {
         partner: 'MedSupply s.r.o.',
         validFrom: new Date('2023-06-01'),
         validUntil: new Date('2024-05-31'),
-        budget: 32000,
+        budget: 13,
         status: 'Ukončená'
       }
     ]);
