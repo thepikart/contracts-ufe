@@ -54,7 +54,7 @@ export class ContractList {
             <md-list-item>
               <div slot="headline">{contract.name}</div>
               <div slot="supporting-text">
-                {'Partner: ' + contract.partner + ' | Platnosť do: ' + contract.validUntil?.toLocaleDateString() + ' | Stav: ' + contract.status}
+                {'Partner: ' + contract.partner + ' | Platnosť do: ' + contract.validUntil?.toLocaleDateString() + ' | Stav: ' + contract.status + ' | Cena: ' + contract.budget + ' €'}
               </div>
               <md-icon slot="start">description</md-icon>
             </md-list-item>
