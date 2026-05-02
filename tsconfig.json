@@ -16,11 +16,7 @@
     "rootDir": "./",
     "jsx": "react",
     "jsxFactory": "h",
-    "jsxFragmentFactory": "h.Fragment",
-    "types": [
-      "@stencil/vitest/globals",
-      "jest"
-    ]
+    "jsxFragmentFactory": "h.Fragment"
   },
   "include": [
     "src"
