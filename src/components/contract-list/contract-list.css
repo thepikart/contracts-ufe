@@ -1,3 +1,130 @@
 :host {
   display: block;
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem 0.25rem 1rem;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+.contract-name {
+  font-weight: 500;
+  margin-right: 0.75rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-ended {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-archived {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.sort-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 30px;
+  gap: 0.15rem;
+  padding: 0 0.25rem 0.75rem 0.25rem;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--md-sys-color-outline);
+  transition: background 0.12s, color 0.12s;
+}
+
+.sort-btn:hover {
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface);
+}
+
+.sort-btn.active {
+  color: #173664;
+  font-weight: 500;
+  background-color: #E7EFFF;
+}
+
+.sort-icon {
+  font-size: 0.85rem;
+}
+
+[slot="supporting-text"] {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+[slot="end"] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.contract-number {
+  font-size: 0.8rem;
+  color: var(--md-sys-color-outline);
+  font-family: monospace;
+}
+
+[slot="supporting-text"] span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+md-list {
+  gap: 10px;
+  background-color: transparent;
+}
+
+md-list-item {
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  background-color: #FAFCFF;
+}
+
+md-list-item:hover {
+  background-color: #E9F3FF;
 }

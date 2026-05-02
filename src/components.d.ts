@@ -6,24 +6,133 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface ContractApp {
+        /**
+          * @default ""
+         */
+        "basePath": string;
+    }
+    interface ContractDetail {
+        "entryId": string;
+    }
+    interface ContractEditor {
+        "entryId": string;
+    }
     interface ContractList {
     }
 }
+export interface ContractDetailCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLContractDetailElement;
+}
+export interface ContractEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLContractEditorElement;
+}
+export interface ContractListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLContractListElement;
+}
 declare global {
+    interface HTMLContractAppElement extends Components.ContractApp, HTMLStencilElement {
+    }
+    var HTMLContractAppElement: {
+        prototype: HTMLContractAppElement;
+        new (): HTMLContractAppElement;
+    };
+    interface HTMLContractDetailElementEventMap {
+        "detail-closed": void;
+        "edit-clicked": string;
+    }
+    interface HTMLContractDetailElement extends Components.ContractDetail, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLContractDetailElementEventMap>(type: K, listener: (this: HTMLContractDetailElement, ev: ContractDetailCustomEvent<HTMLContractDetailElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLContractDetailElementEventMap>(type: K, listener: (this: HTMLContractDetailElement, ev: ContractDetailCustomEvent<HTMLContractDetailElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLContractDetailElement: {
+        prototype: HTMLContractDetailElement;
+        new (): HTMLContractDetailElement;
+    };
+    interface HTMLContractEditorElementEventMap {
+        "editor-closed": string;
+    }
+    interface HTMLContractEditorElement extends Components.ContractEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLContractEditorElementEventMap>(type: K, listener: (this: HTMLContractEditorElement, ev: ContractEditorCustomEvent<HTMLContractEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLContractEditorElementEventMap>(type: K, listener: (this: HTMLContractEditorElement, ev: ContractEditorCustomEvent<HTMLContractEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLContractEditorElement: {
+        prototype: HTMLContractEditorElement;
+        new (): HTMLContractEditorElement;
+    };
+    interface HTMLContractListElementEventMap {
+        "entry-clicked": string;
+    }
     interface HTMLContractListElement extends Components.ContractList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLContractListElementEventMap>(type: K, listener: (this: HTMLContractListElement, ev: ContractListCustomEvent<HTMLContractListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLContractListElementEventMap>(type: K, listener: (this: HTMLContractListElement, ev: ContractListCustomEvent<HTMLContractListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLContractListElement: {
         prototype: HTMLContractListElement;
         new (): HTMLContractListElement;
     };
     interface HTMLElementTagNameMap {
+        "contract-app": HTMLContractAppElement;
+        "contract-detail": HTMLContractDetailElement;
+        "contract-editor": HTMLContractEditorElement;
         "contract-list": HTMLContractListElement;
     }
 }
 declare namespace LocalJSX {
-    interface ContractList {
+    interface ContractApp {
+        /**
+          * @default ""
+         */
+        "basePath"?: string;
     }
+    interface ContractDetail {
+        "entryId"?: string;
+        "onDetail-closed"?: (event: ContractDetailCustomEvent<void>) => void;
+        "onEdit-clicked"?: (event: ContractDetailCustomEvent<string>) => void;
+    }
+    interface ContractEditor {
+        "entryId"?: string;
+        "onEditor-closed"?: (event: ContractEditorCustomEvent<string>) => void;
+    }
+    interface ContractList {
+        "onEntry-clicked"?: (event: ContractListCustomEvent<string>) => void;
+    }
+
+    interface ContractAppAttributes {
+        "basePath": string;
+    }
+    interface ContractDetailAttributes {
+        "entryId": string;
+    }
+    interface ContractEditorAttributes {
+        "entryId": string;
+    }
+
     interface IntrinsicElements {
+        "contract-app": Omit<ContractApp, keyof ContractAppAttributes> & { [K in keyof ContractApp & keyof ContractAppAttributes]?: ContractApp[K] } & { [K in keyof ContractApp & keyof ContractAppAttributes as `attr:${K}`]?: ContractAppAttributes[K] } & { [K in keyof ContractApp & keyof ContractAppAttributes as `prop:${K}`]?: ContractApp[K] };
+        "contract-detail": Omit<ContractDetail, keyof ContractDetailAttributes> & { [K in keyof ContractDetail & keyof ContractDetailAttributes]?: ContractDetail[K] } & { [K in keyof ContractDetail & keyof ContractDetailAttributes as `attr:${K}`]?: ContractDetailAttributes[K] } & { [K in keyof ContractDetail & keyof ContractDetailAttributes as `prop:${K}`]?: ContractDetail[K] };
+        "contract-editor": Omit<ContractEditor, keyof ContractEditorAttributes> & { [K in keyof ContractEditor & keyof ContractEditorAttributes]?: ContractEditor[K] } & { [K in keyof ContractEditor & keyof ContractEditorAttributes as `attr:${K}`]?: ContractEditorAttributes[K] } & { [K in keyof ContractEditor & keyof ContractEditorAttributes as `prop:${K}`]?: ContractEditor[K] };
         "contract-list": ContractList;
     }
 }
@@ -31,6 +140,9 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "contract-app": LocalJSX.IntrinsicElements["contract-app"] & JSXBase.HTMLAttributes<HTMLContractAppElement>;
+            "contract-detail": LocalJSX.IntrinsicElements["contract-detail"] & JSXBase.HTMLAttributes<HTMLContractDetailElement>;
+            "contract-editor": LocalJSX.IntrinsicElements["contract-editor"] & JSXBase.HTMLAttributes<HTMLContractEditorElement>;
             "contract-list": LocalJSX.IntrinsicElements["contract-list"] & JSXBase.HTMLAttributes<HTMLContractListElement>;
         }
     }
