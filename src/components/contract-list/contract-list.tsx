@@ -94,7 +94,7 @@ export class ContractList {
       <Host>
         <div class="header">
           <h2>Zmluvy s externými partnermi</h2>
-          <md-icon-button>
+          <md-icon-button onClick={() => this.entryClicked.emit('@new')}>
             <md-icon>add</md-icon>
           </md-icon-button>
         </div>
@@ -118,8 +118,8 @@ export class ContractList {
             </div>,
 
             <md-list>
-              {this.getSorted().map(({ contract, index }) =>
-                <md-list-item onClick={() => this.entryClicked.emit(index.toString())}>
+              {this.getSorted().map(({ contract }) =>
+                <md-list-item onClick={() => this.entryClicked.emit(contract.contractNumber)}>
                   <div slot="headline">
                     <span class="contract-name">{contract.name}</span>
                   </div>

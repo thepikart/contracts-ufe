@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { CONTRACTS, Contract } from '../../utils/contracts-data';
+import { HospitalContractsApi, Contract, Configuration } from '../../api/contracts';
 
 @Component({
   tag: 'contract-detail',
@@ -8,28 +8,57 @@ import { CONTRACTS, Contract } from '../../utils/contracts-data';
 })
 export class ContractDetail {
 
-  @Prop() entryId: string;
+  @Prop() entryId: string = '';
+  @Prop() apiBase: string = '';
 
   @Event({ eventName: "detail-closed" }) detailClosed: EventEmitter<void>;
   @Event({ eventName: "edit-clicked" }) editClicked: EventEmitter<string>;
 
   @State() contract: Contract;
+  @State() errorMessage: string = '';
 
-  componentWillLoad() {
-    const index = parseInt(this.entryId);
-    this.contract = CONTRACTS[index];
+  async componentWillLoad() {
+    this.contract = await this.getContractAsync();
+  }
+
+  private async getContractAsync(): Promise<Contract> {
+    try {
+      const configuration = new Configuration({ basePath: this.apiBase });
+      const contractsApi = new HospitalContractsApi(configuration);
+      const response = await contractsApi.getContractRaw({ contractId: this.entryId });
+      if (response.raw.status < 299) {
+        return await response.value();
+      } else {
+        this.errorMessage = `Cannot retrieve contract: ${response.raw.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve contract: ${err.message || "unknown"}`;
+    }
+    return undefined;
   }
 
   private getStatusColor(status: string): string {
     switch (status) {
-      case 'Aktívna': return 'status-active';
-      case 'Ukončená': return 'status-ended';
-      case 'Archivovaná': return 'status-archived';
+      case 'Active': return 'status-active';
+      case 'Ended': return 'status-ended';
+      case 'Archived': return 'status-archived';
       default: return '';
     }
   }
 
+  private getStatusLabel(status: string): string {
+    switch (status) {
+      case 'Active': return 'Aktívna';
+      case 'Ended': return 'Ukončená';
+      case 'Archived': return 'Archivovaná';
+      default: return status;
+    }
+  }
+
   render() {
+    if (this.errorMessage) {
+      return <Host><div class="error">{this.errorMessage}</div></Host>;
+    }
     if (!this.contract) {
       return <Host><p class="not-found">Zmluva nenájdená.</p></Host>;
     }
@@ -50,7 +79,7 @@ export class ContractDetail {
 
         <div class="meta">
           <span class="contract-number">{c.contractNumber}</span>
-          <span class={`status-badge ${this.getStatusColor(c.status)}`}>{c.status}</span>
+          <span class={`status-badge ${this.getStatusColor(c.status)}`}>{this.getStatusLabel(c.status)}</span>
         </div>
 
         <md-divider></md-divider>

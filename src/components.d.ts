@@ -17,9 +17,23 @@ export namespace Components {
         "basePath": string;
     }
     interface ContractDetail {
+        /**
+          * @default ''
+         */
+        "apiBase": string;
+        /**
+          * @default ''
+         */
         "entryId": string;
     }
     interface ContractEditor {
+        /**
+          * @default ''
+         */
+        "apiBase": string;
+        /**
+          * @default ''
+         */
         "entryId": string;
     }
     interface ContractList {
@@ -119,11 +133,25 @@ declare namespace LocalJSX {
         "basePath"?: string;
     }
     interface ContractDetail {
+        /**
+          * @default ''
+         */
+        "apiBase"?: string;
+        /**
+          * @default ''
+         */
         "entryId"?: string;
         "onDetail-closed"?: (event: ContractDetailCustomEvent<void>) => void;
         "onEdit-clicked"?: (event: ContractDetailCustomEvent<string>) => void;
     }
     interface ContractEditor {
+        /**
+          * @default ''
+         */
+        "apiBase"?: string;
+        /**
+          * @default ''
+         */
         "entryId"?: string;
         "onEditor-closed"?: (event: ContractEditorCustomEvent<string>) => void;
     }
@@ -141,9 +169,11 @@ declare namespace LocalJSX {
     }
     interface ContractDetailAttributes {
         "entryId": string;
+        "apiBase": string;
     }
     interface ContractEditorAttributes {
         "entryId": string;
+        "apiBase": string;
     }
     interface ContractListAttributes {
         "apiBase": string;

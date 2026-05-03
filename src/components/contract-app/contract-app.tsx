@@ -56,16 +56,16 @@ export class ContractApp {
     return (
       <Host>
         {element === "editor"
-          ? <contract-editor entry-id={entryId}
+          ? <contract-editor entry-id={entryId} api-base={this.apiBase}
             oneditor-closed={() => entryId !== "@new" ? navigate("./detail/" + entryId) : navigate("./list")}>
           </contract-editor>
           : element === "detail"
-          ? <contract-detail entry-id={entryId}
+          ? <contract-detail entry-id={entryId} api-base={this.apiBase}
             ondetail-closed={() => navigate("./list")}
             onedit-clicked={(ev: CustomEvent<string>) => navigate("./entry/" + ev.detail)}>
           </contract-detail>
           : <contract-list api-base={this.apiBase}
-            onentry-clicked={(ev: CustomEvent<string>) => navigate("./detail/" + ev.detail)}>
+            onentry-clicked={(ev: CustomEvent<string>) => ev.detail === '@new' ? navigate("./entry/@new") : navigate("./detail/" + ev.detail)}>
           </contract-list>
         }
       </Host>
