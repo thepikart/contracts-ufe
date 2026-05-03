@@ -57,7 +57,7 @@ export class ContractApp {
       <Host>
         {element === "editor"
           ? <contract-editor entry-id={entryId} api-base={this.apiBase}
-            oneditor-closed={() => entryId !== "@new" ? navigate("./detail/" + entryId) : navigate("./list")}>
+            oneditor-closed={(ev: CustomEvent<string>) => ev.detail === "delete" || entryId === "@new" ? navigate("./list") : navigate("./detail/" + entryId)}>
           </contract-editor>
           : element === "detail"
           ? <contract-detail entry-id={entryId} api-base={this.apiBase}

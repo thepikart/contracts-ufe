@@ -257,7 +257,7 @@ export class ContractEditor {
           <md-filled-tonal-button id="delete" disabled={!this.entry || this.entryId === '@new'}
             onClick={() => this.deleteEntry()}>
             <md-icon slot="icon">delete</md-icon>
-            Archivovať
+            Vymazať
           </md-filled-tonal-button>
           <span class="stretch-fill"></span>
           <md-outlined-button id="cancel"
