@@ -128,3 +128,11 @@ md-list-item {
 md-list-item:hover {
   background-color: #E9F3FF;
 }
+
+.error {
+  margin: 20px 0;
+  color: red;
+  font-size: 1rem;
+  font-weight: 900;
+  text-align: center;
+}

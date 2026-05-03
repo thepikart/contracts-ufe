@@ -10,6 +10,10 @@ export namespace Components {
         /**
           * @default ""
          */
+        "apiBase": string;
+        /**
+          * @default ""
+         */
         "basePath": string;
     }
     interface ContractDetail {
@@ -19,6 +23,10 @@ export namespace Components {
         "entryId": string;
     }
     interface ContractList {
+        /**
+          * @default ''
+         */
+        "apiBase": string;
     }
 }
 export interface ContractDetailCustomEvent<T> extends CustomEvent<T> {
@@ -104,6 +112,10 @@ declare namespace LocalJSX {
         /**
           * @default ""
          */
+        "apiBase"?: string;
+        /**
+          * @default ""
+         */
         "basePath"?: string;
     }
     interface ContractDetail {
@@ -116,11 +128,16 @@ declare namespace LocalJSX {
         "onEditor-closed"?: (event: ContractEditorCustomEvent<string>) => void;
     }
     interface ContractList {
+        /**
+          * @default ''
+         */
+        "apiBase"?: string;
         "onEntry-clicked"?: (event: ContractListCustomEvent<string>) => void;
     }
 
     interface ContractAppAttributes {
         "basePath": string;
+        "apiBase": string;
     }
     interface ContractDetailAttributes {
         "entryId": string;
@@ -128,12 +145,15 @@ declare namespace LocalJSX {
     interface ContractEditorAttributes {
         "entryId": string;
     }
+    interface ContractListAttributes {
+        "apiBase": string;
+    }
 
     interface IntrinsicElements {
         "contract-app": Omit<ContractApp, keyof ContractAppAttributes> & { [K in keyof ContractApp & keyof ContractAppAttributes]?: ContractApp[K] } & { [K in keyof ContractApp & keyof ContractAppAttributes as `attr:${K}`]?: ContractAppAttributes[K] } & { [K in keyof ContractApp & keyof ContractAppAttributes as `prop:${K}`]?: ContractApp[K] };
         "contract-detail": Omit<ContractDetail, keyof ContractDetailAttributes> & { [K in keyof ContractDetail & keyof ContractDetailAttributes]?: ContractDetail[K] } & { [K in keyof ContractDetail & keyof ContractDetailAttributes as `attr:${K}`]?: ContractDetailAttributes[K] } & { [K in keyof ContractDetail & keyof ContractDetailAttributes as `prop:${K}`]?: ContractDetail[K] };
         "contract-editor": Omit<ContractEditor, keyof ContractEditorAttributes> & { [K in keyof ContractEditor & keyof ContractEditorAttributes]?: ContractEditor[K] } & { [K in keyof ContractEditor & keyof ContractEditorAttributes as `attr:${K}`]?: ContractEditorAttributes[K] } & { [K in keyof ContractEditor & keyof ContractEditorAttributes as `prop:${K}`]?: ContractEditor[K] };
-        "contract-list": ContractList;
+        "contract-list": Omit<ContractList, keyof ContractListAttributes> & { [K in keyof ContractList & keyof ContractListAttributes]?: ContractList[K] } & { [K in keyof ContractList & keyof ContractListAttributes as `attr:${K}`]?: ContractListAttributes[K] } & { [K in keyof ContractList & keyof ContractListAttributes as `prop:${K}`]?: ContractList[K] };
     }
 }
 export { LocalJSX as JSX };

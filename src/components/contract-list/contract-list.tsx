@@ -1,5 +1,5 @@
-import { Component, Event, EventEmitter, Host, h, State } from '@stencil/core';
-import { CONTRACTS, Contract } from '../../utils/contracts-data';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { HospitalContractsApi, Contract, Configuration } from '../../api/contracts';
 
 type SortField = 'date' | 'name' | 'budget';
 type SortDir = 'asc' | 'desc';
@@ -11,14 +11,34 @@ type SortDir = 'asc' | 'desc';
 })
 export class ContractList {
 
-  @State() contracts: Contract[];
+  @Prop() apiBase: string = '';
+  @State() contracts: Contract[] = [];
   @State() sortField: SortField = 'date';
   @State() sortDir: SortDir = 'asc';
+  @State() errorMessage: string = '';
 
   @Event({ eventName: "entry-clicked" }) entryClicked: EventEmitter<string>;
 
-  componentWillLoad() {
-    this.contracts = CONTRACTS;
+  private async getContractsAsync(): Promise<Contract[]> {
+    try {
+      const configuration = new Configuration({
+        basePath: this.apiBase,
+      });
+      const contractsApi = new HospitalContractsApi(configuration);
+      const response = await contractsApi.getContractsRaw({});
+      if (response.raw.status < 299) {
+        return await response.value();
+      } else {
+        this.errorMessage = `Cannot retrieve list of contracts: ${response.raw.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve list of contracts: ${err.message || "unknown"}`;
+    }
+    return [];
+  }
+
+  async componentWillLoad() {
+    this.contracts = await this.getContractsAsync();
   }
 
   private setSort(field: SortField) {
@@ -47,10 +67,19 @@ export class ContractList {
 
   private getStatusColor(status: string): string {
     switch (status) {
-      case 'Aktívna': return 'status-active';
-      case 'Ukončená': return 'status-ended';
-      case 'Archivovaná': return 'status-archived';
+      case 'Active': return 'status-active';
+      case 'Ended': return 'status-ended';
+      case 'Archived': return 'status-archived';
       default: return '';
+    }
+  }
+
+  private getStatusLabel(status: string): string {
+    switch (status) {
+      case 'Active': return 'Aktívna';
+      case 'Ended': return 'Ukončená';
+      case 'Archived': return 'Archivovaná';
+      default: return status;
     }
   }
 
@@ -70,50 +99,55 @@ export class ContractList {
           </md-icon-button>
         </div>
 
-        <div class="sort-bar">
-          {(['date', 'name', 'budget'] as SortField[]).map(field => (
-            <button
-              class={`sort-btn${this.sortField === field ? ' active' : ''}`}
-              onClick={() => this.setSort(field)}>
-              {SORT_LABELS[field]}
-              {this.sortField === field && (
-                <md-icon class="sort-icon">
-                  {this.sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward'}
-                </md-icon>
-              )}
-            </button>
-          ))}
-        </div>
+        {this.errorMessage
+          ? <div class="error">{this.errorMessage}</div>
+          : [
+            <div class="sort-bar">
+              {(['date', 'name', 'budget'] as SortField[]).map(field => (
+                <button
+                  class={`sort-btn${this.sortField === field ? ' active' : ''}`}
+                  onClick={() => this.setSort(field)}>
+                  {SORT_LABELS[field]}
+                  {this.sortField === field && (
+                    <md-icon class="sort-icon">
+                      {this.sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward'}
+                    </md-icon>
+                  )}
+                </button>
+              ))}
+            </div>,
 
-        <md-list>
-          {this.getSorted().map(({ contract, index }) =>
-            <md-list-item onClick={() => this.entryClicked.emit(index.toString())}>
-              <div slot="headline">
-                <span class="contract-name">{contract.name}</span>
-              </div>
-              <div slot="supporting-text">
-                <span>
-                  <md-icon class="inline-icon">business</md-icon>
-                  {contract.partner}
-                </span>
-                <span>
-                  <md-icon class="inline-icon">calendar_today</md-icon>
-                  {contract.validFrom?.toLocaleDateString()} – {contract.validUntil?.toLocaleDateString()}
-                </span>
-                <span>
-                  <md-icon class="inline-icon">euro</md-icon>
-                  {contract.budget.toLocaleString()} €
-                </span>
-              </div>
-              <div slot="end">
-                <span class={`status-badge ${this.getStatusColor(contract.status)}`}>
-                  {contract.status}
-                </span>
-                <div class="contract-number">{contract.contractNumber}</div>
-              </div>
-            </md-list-item>
-          )}
-        </md-list>
+            <md-list>
+              {this.getSorted().map(({ contract, index }) =>
+                <md-list-item onClick={() => this.entryClicked.emit(index.toString())}>
+                  <div slot="headline">
+                    <span class="contract-name">{contract.name}</span>
+                  </div>
+                  <div slot="supporting-text">
+                    <span>
+                      <md-icon class="inline-icon">business</md-icon>
+                      {contract.partner}
+                    </span>
+                    <span>
+                      <md-icon class="inline-icon">calendar_today</md-icon>
+                      {contract.validFrom?.toLocaleDateString()} – {contract.validUntil?.toLocaleDateString()}
+                    </span>
+                    <span>
+                      <md-icon class="inline-icon">euro</md-icon>
+                      {contract.budget.toLocaleString()} €
+                    </span>
+                  </div>
+                  <div slot="end">
+                    <span class={`status-badge ${this.getStatusColor(contract.status)}`}>
+                      {this.getStatusLabel(contract.status)}
+                    </span>
+                    <div class="contract-number">{contract.contractNumber}</div>
+                  </div>
+                </md-list-item>
+              )}
+            </md-list>
+          ]
+        }
       </Host>
     );
   }

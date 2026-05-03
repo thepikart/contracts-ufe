@@ -14,6 +14,7 @@ export class ContractApp {
   @State() private relativePath = "";
 
   @Prop() basePath: string = "";
+  @Prop() apiBase: string = "";
 
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || "/").pathname;
@@ -63,7 +64,7 @@ export class ContractApp {
             ondetail-closed={() => navigate("./list")}
             onedit-clicked={(ev: CustomEvent<string>) => navigate("./entry/" + ev.detail)}>
           </contract-detail>
-          : <contract-list
+          : <contract-list api-base={this.apiBase}
             onentry-clicked={(ev: CustomEvent<string>) => navigate("./detail/" + ev.detail)}>
           </contract-list>
         }
