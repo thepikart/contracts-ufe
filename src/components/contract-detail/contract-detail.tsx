@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { HospitalContractsApi, Contract, Configuration } from '../../api/contracts';
+import { HospitalContractsApi, Contract, Configuration, ResponseError } from '../../api/contracts';
 
 @Component({
   tag: 'contract-detail',
@@ -28,10 +28,11 @@ export class ContractDetail {
       const response = await contractsApi.getContractRaw({ contractId: this.entryId });
       if (response.raw.status < 299) {
         return await response.value();
-      } else {
-        this.errorMessage = `Cannot retrieve contract: ${response.raw.statusText}`;
       }
     } catch (err: any) {
+      if (err instanceof ResponseError && err.response.status === 404) {
+        return undefined;
+      }
       this.errorMessage = `Cannot retrieve contract: ${err.message || "unknown"}`;
     }
     return undefined;
