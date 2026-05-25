@@ -88,7 +88,6 @@ md-list-item {
 
 md-list-item.border-active   { border-left-color: #10b981; }
 md-list-item.border-ended    { border-left-color: #ef4444; }
-md-list-item.border-archived { border-left-color: #3b82f6; }
 
 md-list-item:hover {
   box-shadow: 0 4px 16px rgba(30, 58, 138, 0.15);
@@ -157,10 +156,6 @@ md-list-item:hover {
   color: #991b1b;
 }
 
-.status-archived {
-  background-color: #dbeafe;
-  color: #1e40af;
-}
 
 .error {
   margin: 2rem auto;

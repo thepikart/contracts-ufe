@@ -33,7 +33,7 @@ export class ContractDetail {
       if (err instanceof ResponseError && err.response.status === 404) {
         return undefined;
       }
-      this.errorMessage = `Cannot retrieve contract: ${err.message || "unknown"}`;
+      this.errorMessage = `Nepodarilo sa načítať zmluvu: ${err.message || "unknown"}`;
     }
     return undefined;
   }
@@ -42,7 +42,6 @@ export class ContractDetail {
     switch (status) {
       case 'Active': return 'status-active';
       case 'Ended': return 'status-ended';
-      case 'Archived': return 'status-archived';
       default: return '';
     }
   }
@@ -51,7 +50,6 @@ export class ContractDetail {
     switch (status) {
       case 'Active': return 'Aktívna';
       case 'Ended': return 'Ukončená';
-      case 'Archived': return 'Archivovaná';
       default: return status;
     }
   }

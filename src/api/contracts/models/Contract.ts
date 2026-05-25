@@ -81,8 +81,7 @@ export interface Contract {
  */
 export const ContractStatusEnum = {
     Active: 'Active',
-    Ended: 'Ended',
-    Archived: 'Archived'
+    Ended: 'Ended'
 } as const;
 export type ContractStatusEnum = typeof ContractStatusEnum[keyof typeof ContractStatusEnum];
 

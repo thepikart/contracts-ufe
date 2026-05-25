@@ -15,6 +15,7 @@ export class ContractEditor {
 
   @State() entry: Contract = undefined;
   @State() errorMessage: string = '';
+  @State() saveError: string = '';
   @State() isValid: boolean = false;
   @State() private budget: number = 0;
 
@@ -53,10 +54,10 @@ export class ContractEditor {
         this.budget = this.entry.budget;
         this.isValid = true;
       } else {
-        this.errorMessage = `Cannot retrieve contract: ${response.raw.statusText}`;
+        this.errorMessage = `Nepodarilo sa načítať zmluvu: ${response.raw.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve contract: ${err.message || "unknown"}`;
+      this.errorMessage = `Nepodarilo sa načítať zmluvu: ${err.message || "unknown"}`;
     }
     return undefined;
   }
@@ -93,16 +94,34 @@ export class ContractEditor {
       if (response.raw.status < 299) {
         this.editorClosed.emit("delete");
       } else {
-        this.errorMessage = `Cannot delete contract: ${response.raw.statusText}`;
+        this.saveError = `Nepodarilo sa vymazať zmluvu: ${response.raw.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot delete contract: ${err.message || "unknown"}`;
+      this.saveError = `Nepodarilo sa vymazať zmluvu: ${err.message || "unknown"}`;
     }
   }
 
   private async updateEntry() {
+    this.saveError = '';
     if (!this.validateForm('show-errors')) {
       return;
+    }
+    if (this.entry?.validFrom && this.entry?.validUntil && this.entry.validFrom >= this.entry.validUntil) {
+      this.saveError = 'Dátum platnosti od musí byť skôr ako dátum platnosti do';
+      return;
+    }
+    if (this.entry?.validFrom && this.entry?.validUntil && this.entry?.status) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const from = new Date(this.entry.validFrom); from.setHours(0, 0, 0, 0);
+      const until = new Date(this.entry.validUntil); until.setHours(0, 0, 0, 0);
+      if (today > until && this.entry.status === 'Active') {
+        this.saveError = 'Zmluva po dátume ukončenia nemôže byť aktívna';
+        return;
+      }
+      if (today >= from && today <= until && this.entry.status === 'Ended') {
+        this.saveError = 'Zmluva v období platnosti nemôže byť ukončená';
+        return;
+      }
     }
     try {
       const configuration = new Configuration({ basePath: this.apiBase });
@@ -114,10 +133,10 @@ export class ContractEditor {
       if (response.raw.status < 299) {
         this.editorClosed.emit("store");
       } else {
-        this.errorMessage = `Cannot save contract: ${response.raw.statusText}`;
+        this.saveError = `Nepodarilo sa uložiť zmluvu: ${response.raw.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot save contract: ${err.message || "unknown"}`;
+      this.saveError = `Nepodarilo sa uložiť zmluvu: ${err.message || "unknown"}`;
     }
   }
 
@@ -195,6 +214,7 @@ export class ContractEditor {
           </md-filled-select>
 
           <md-filled-text-field label="Platnosť od" type="date"
+            required
             value={toDateString(this.entry?.validFrom)}
             oninput={(ev: InputEvent) => {
               if (this.entry) { this.entry.validFrom = new Date(this.handleInputEvent(ev)); }
@@ -203,6 +223,7 @@ export class ContractEditor {
           </md-filled-text-field>
 
           <md-filled-text-field label="Platnosť do" type="date"
+            required
             value={toDateString(this.entry?.validUntil)}
             oninput={(ev: InputEvent) => {
               if (this.entry) { this.entry.validUntil = new Date(this.handleInputEvent(ev)); }
@@ -237,9 +258,6 @@ export class ContractEditor {
             <md-select-option value="Ended">
               <div slot="headline">Ukončená</div>
             </md-select-option>
-            <md-select-option value="Archived">
-              <div slot="headline">Archivovaná</div>
-            </md-select-option>
           </md-filled-select>
 
           <md-filled-text-field label="Popis" type="textarea" rows={3}
@@ -270,6 +288,21 @@ export class ContractEditor {
             Uložiť
           </md-filled-button>
         </div>
+
+        {this.saveError && (
+          <div class="dialog-overlay" onClick={() => { this.saveError = ''; }}>
+            <div class="dialog" onClick={(e) => e.stopPropagation()}>
+              <div class="dialog-header">
+                <md-icon class="dialog-icon">error</md-icon>
+                <span class="dialog-title">Chyba</span>
+              </div>
+              <p class="dialog-message">{this.saveError}</p>
+              <div class="dialog-actions">
+                <md-filled-button onClick={() => { this.saveError = ''; }}>OK</md-filled-button>
+              </div>
+            </div>
+          </div>
+        )}
       </Host>
     );
   }

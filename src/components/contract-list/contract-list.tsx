@@ -29,10 +29,10 @@ export class ContractList {
       if (response.raw.status < 299) {
         return await response.value();
       } else {
-        this.errorMessage = `Cannot retrieve list of contracts: ${response.raw.statusText}`;
+        this.errorMessage = `Nepodarilo sa načítať zoznam zmlúv: ${response.raw.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of contracts: ${err.message || "unknown"}`;
+      this.errorMessage = `Nepodarilo sa načítať zoznam zmlúv: ${err.message || "unknown"}`;
     }
     return [];
   }
@@ -69,7 +69,6 @@ export class ContractList {
     switch (status) {
       case 'Active': return 'status-active';
       case 'Ended': return 'status-ended';
-      case 'Archived': return 'status-archived';
       default: return '';
     }
   }
@@ -78,7 +77,6 @@ export class ContractList {
     switch (status) {
       case 'Active': return 'Aktívna';
       case 'Ended': return 'Ukončená';
-      case 'Archived': return 'Archivovaná';
       default: return status;
     }
   }
