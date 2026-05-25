@@ -119,7 +119,7 @@ export class ContractList {
 
             <md-list>
               {this.getSorted().map(({ contract }) =>
-                <md-list-item onClick={() => this.entryClicked.emit(contract.contractNumber)}>
+                <md-list-item class={`border-${contract.status?.toLowerCase()}`} onClick={() => this.entryClicked.emit(contract.contractNumber)}>
                   <div slot="headline">
                     <span class="contract-name">{contract.name}</span>
                   </div>
